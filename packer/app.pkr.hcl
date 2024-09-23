@@ -14,7 +14,7 @@ variable "build_region" {
 
 variable "vm_type" {
   type    = string
-  default = "t3.small"
+  default = "t2.micro"
 }
 
 locals {
@@ -39,17 +39,16 @@ source "amazon-ebs" "ubuntu" {
 }
 
 build {
-  name    = "gitlab_build"
+  name    = "nginx_build"
   sources = ["source.amazon-ebs.ubuntu"]
 
   provisioner "shell" {
     inline = [
       "#!/bin/bash",
       "sudo apt-get update",
-      "sudo apt-get install -y curl openssh-server ca-certificates tzdata perl",
-      "sudo curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash",
-      "sudo EXTERNAL_URL=\"http://$(curl -s http://169.254.169.254/latest/meta-data/public-ipv4)\" apt-get install -y gitlab-ee",
-      "sudo gitlab-ctl reconfigure"
+      "sudo apt-get install -y nginx",
+      "sudo systemctl start nginx",
+      "sudo systemctl enable nginx"
     ]
   }
   provisioner "breakpoint" {
