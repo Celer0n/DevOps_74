@@ -5,5 +5,6 @@ variable "base_url" {
 
 variable "token" {
   description = "Token for git"
-  default = ""
+  default = "glpat-PZqKt_8xo82Pj-uLwLmF"
 }
+
